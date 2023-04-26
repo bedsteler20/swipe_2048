@@ -1,30 +1,37 @@
-class NumberBox {
-  NumberBox(this._value);
-  int _value;
+import 'dart:async';
+import 'dart:ui';
 
-  /// Merges the [NumberBox] provided into this [NumberBox] and the
-  /// destroys the other boxes
-  void mergeInto(List<NumberBox> boxes) {
-    for (var box in boxes) {
-      _value += box._value;
-      box.destroy();
-    }
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flutter/material.dart';
+
+import './helpers.dart';
+
+class NumberBox extends PositionComponent {
+  late final textComp = TextComponent(
+    text: "2048",
+    anchor: Anchor.center,
+    position: rectComp.size / 2,
+  );
+  late final rectComp = RectangleComponent(
+    size: Vector2(100, 100),
+    paint: Paint()..color = Colors.red,
+  );
+
+  NumberBox({Vector2? position, Vector2? size})
+      : super(position: position, size: size) {
+    rectComp.size.addListener(_onRectResize);
   }
 
-  /// Determines if the provided [NumberBox]s are able to be merged to this box
-  bool canMerge(List<NumberBox> boxes) {
-    if (boxes.isEmpty) return false;
-    var items = boxes.toList()..add(this);
-    if (items[0]._value != items[1]._value) return false;
-
-    for (var i = 1; i < items.length - 1; i++) {
-      if (items[i]._value == items[i + 1]._value) continue;
-      if (items[i]._value == (items[i + 1]._value * 2).toInt()) continue;
-      return false;
-    }
-    return true;
+  @override
+  FutureOr<void> onLoad() {
+    rectComp.add(textComp);
+    add(rectComp);
+    return super.onLoad();
   }
 
-  /// Handles removing the box from the screen
-  void destroy() {}
+  @subscribe
+  void _onRectResize() {
+    // Center text component
+  }
 }
