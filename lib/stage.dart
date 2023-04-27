@@ -4,8 +4,8 @@ import 'package:flame/components.dart';
 import 'package:swipe_2048/num_box.dart';
 
 class Stage extends Component {
-  int dX = 4;
-  int dY = 6;
+  int dX = 10;
+  int dY = 10;
 
   @override
   FutureOr<void> onLoad() {
@@ -18,7 +18,7 @@ class Stage extends Component {
           position: Vector2(x, y),
           size: Vector2(size, size),
         ));
-        x += size + padding ;
+        x += size + padding;
       }
       x = 0;
       y += size + padding;
